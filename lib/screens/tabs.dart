@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/screens/categories.dart';
 import 'package:meals_app/screens/meals.dart';
 
@@ -11,6 +12,27 @@ class TabsScreens extends StatefulWidget {
 
 class _TabsScreensState extends State<TabsScreens> {
   int _currentScreenIndex = 0;
+  final List<Meal> _favMeals = [];
+
+  void _showInfoMessage(String message) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void _toggleMealFavStatus(Meal meal) {
+    final isExisting = _favMeals.contains(meal);
+
+    setState(() {
+      if (isExisting) {
+        _favMeals.remove(meal);
+        _showInfoMessage('Meal is no longer a favorite.');
+      } else {
+        _favMeals.add(meal);
+        _showInfoMessage('Added to your favorites successfully!');
+      }
+    });
+  }
 
   _selectScreen(int index) {
     setState(() {
@@ -20,11 +42,16 @@ class _TabsScreensState extends State<TabsScreens> {
 
   @override
   Widget build(BuildContext context) {
-    Widget activeScreen = const Categories();
+    Widget activeScreen = Categories(
+      onToggleFav: _toggleMealFavStatus,
+    );
     String activeScreenTitle = 'Categories';
 
     if (_currentScreenIndex == 1) {
-      activeScreen = const MealsScreen(meals: []);
+      activeScreen = MealsScreen(
+        meals: _favMeals,
+        onToggleFav: _toggleMealFavStatus,
+      );
       activeScreenTitle = 'Your Favorites';
     }
 
