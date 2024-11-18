@@ -9,9 +9,11 @@ class Categories extends StatelessWidget {
   const Categories({
     super.key,
     required this.onToggleFav,
+    required this.availabeMeals,
   });
 
   final void Function(Meal meal) onToggleFav;
+  final List<Meal> availabeMeals;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class Categories extends StatelessWidget {
   }
 
   void _selectCategory(BuildContext context, Category category) {
-    final filteredMeals = dummyMeals
+    final filteredMeals = availabeMeals
         .where((meal) => meal.categories.contains(category.id))
         .toList();
 

@@ -39,6 +39,7 @@ class MainDrawer extends StatelessWidget {
                   'Cooking Up!',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Theme.of(context).colorScheme.primary,
+                        fontSize: 28,
                       ),
                 )
               ],
@@ -54,7 +55,7 @@ class MainDrawer extends StatelessWidget {
               'Meals',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
-                  fontSize: 24),
+                  fontSize: 18),
             ),
             onTap: () {
               onSelectScreen('meals');
@@ -70,7 +71,7 @@ class MainDrawer extends StatelessWidget {
               'Filters',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
-                  fontSize: 24),
+                  fontSize: 18),
             ),
             onTap: () {
               onSelectScreen('filters');
