@@ -5,7 +5,7 @@ import 'package:meals_app/models/meal.dart';
 import 'package:meals_app/screens/meals.dart';
 import 'package:meals_app/widgets/category_item_grid.dart';
 
-class Categories extends StatelessWidget {
+class Categories extends StatefulWidget {
   const Categories({
     super.key,
     required this.availabeMeals,
@@ -14,9 +14,37 @@ class Categories extends StatelessWidget {
   final List<Meal> availabeMeals;
 
   @override
+  State<Categories> createState() => _CategoriesState();
+}
+
+class _CategoriesState extends State<Categories>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(microseconds: 300),
+      lowerBound: 0,
+      upperBound: 1,
+    );
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
+    return AnimatedBuilder(
+      animation: _animationController,
       child: GridView(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -33,11 +61,15 @@ class Categories extends StatelessWidget {
                 })
         ],
       ),
+      builder: (context, child) => Padding(
+        padding: EdgeInsets.only(top: 100 - _animationController.value * 100),
+        child: child,
+      ),
     );
   }
 
   void _selectCategory(BuildContext context, Category category) {
-    final filteredMeals = availabeMeals
+    final filteredMeals = widget.availabeMeals
         .where((meal) => meal.categories.contains(category.id))
         .toList();
 
