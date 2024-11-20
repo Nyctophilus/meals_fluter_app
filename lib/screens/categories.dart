@@ -43,33 +43,36 @@ class _CategoriesState extends State<Categories>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animationController,
-      child: GridView(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: AnimatedBuilder(
+        animation: _animationController,
+        child: GridView(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 3 / 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+          ),
+          children: [
+            for (final category in availableCategories)
+              CategoryItem(
+                  item: category,
+                  onSelectCategory: () {
+                    _selectCategory(context, category);
+                  })
+          ],
         ),
-        children: [
-          for (final category in availableCategories)
-            CategoryItem(
-                item: category,
-                onSelectCategory: () {
-                  _selectCategory(context, category);
-                })
-        ],
-      ),
-      builder: (context, child) => SlideTransition(
-        position: Tween(
-          begin: const Offset(0, 0.3),
-          end: const Offset(0, 0),
-        ).animate(CurvedAnimation(
-          parent: _animationController,
-          curve: Curves.easeInOut,
-        )),
-        child: child,
+        builder: (context, child) => SlideTransition(
+          position: Tween(
+            begin: const Offset(0, 0.3),
+            end: const Offset(0, 0),
+          ).animate(CurvedAnimation(
+            parent: _animationController,
+            curve: Curves.easeInOut,
+          )),
+          child: child,
+        ),
       ),
     );
   }
