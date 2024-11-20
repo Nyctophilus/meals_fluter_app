@@ -14,29 +14,43 @@ class MealDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(meal.title),
-        actions: [
-          IconButton(
-            onPressed: () {
-              final wasAdded = ref
-                  .read(favoriteMealsProvider.notifier)
-                  .toggleMealsFavStatus(meal);
+    final bool isFav = ref.watch(favoriteMealsProvider).contains(meal);
 
-              ScaffoldMessenger.of(context).clearSnackBars();
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      wasAdded ? 'Meal added as favorite.' : 'Meal removed!')));
-            },
-            icon: Icon(
-              ref.watch(favoriteMealsProvider).contains(meal)
-                  ? Icons.star
-                  : Icons.star_border_outlined,
-            ),
+    return Scaffold(
+      appBar: AppBar(title: Text(meal.title), actions: [
+        IconButton(
+          onPressed: () {
+            final wasAdded = ref
+                .read(favoriteMealsProvider.notifier)
+                .toggleMealsFavStatus(meal);
+
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                    wasAdded ? 'Meal added as favorite.' : 'Meal removed!')));
+          },
+          // icon: AnimatedSwitcher(
+          //   duration: const Duration(milliseconds: 200),
+          //   transitionBuilder: (child, animation) {
+          //     return RotationTransition(
+          //       turns: Tween(begin: 0.9, end: 1.0).animate(animation),
+          //       child: child,
+          //     );
+          //   },
+          //   child: Icon(
+          //     isFav ? Icons.star : Icons.star_border_outlined,
+          //     key: ValueKey(isFav),
+          //   ),
+          // ),
+          icon: AnimatedCrossFade(
+            firstChild: const Icon(Icons.star),
+            secondChild: const Icon(Icons.star_border_outlined),
+            crossFadeState:
+                isFav ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+            duration: const Duration(milliseconds: 500),
           ),
-        ],
-      ),
+        ),
+      ]),
       body: SingleChildScrollView(
         child: Column(
           children: [
