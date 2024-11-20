@@ -54,12 +54,15 @@ class MealDetailsScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            FadeInImage(
-              image: NetworkImage(meal.imageUrl),
-              placeholder: MemoryImage(kTransparentImage),
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: 300,
+            Hero(
+              tag: meal.id,
+              child: FadeInImage(
+                image: NetworkImage(meal.imageUrl),
+                placeholder: MemoryImage(kTransparentImage),
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 300,
+              ),
             ),
             const SizedBox(height: 32),
             Text(
